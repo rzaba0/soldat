@@ -627,6 +627,17 @@ begin
   PHYSFS_CopyFileFromArchive('configs/weapons.ini', UserDirectory + '/configs/weapons.ini');
   PHYSFS_CopyFileFromArchive('configs/weapons_realistic.ini', UserDirectory + '/configs/weapons_realistic.ini');
 
+  // Copy default bots if configs/bots directory is missing.
+  // We don't want to copy default bots on every launch; this allows
+  // server owners to delete some bots without the risk of having them
+  // recreated on next launch.
+  if not DirectoryExists(UserDirectory + '/configs/bots') then
+    if not CreateDir(UserDirectory + '/configs/bots') then
+      WriteLn('Could not create bots directory.')
+    else
+      if not PHYSFS_CopyFilesFromArchiveDirectory('configs/bots', UserDirectory + '/configs/bots') then
+        WriteLn('Could not copy bots from mod archive.');
+
   LoadConfig('server.cfg');
 
   CvarsInitialized := True;
