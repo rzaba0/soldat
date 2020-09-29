@@ -938,7 +938,8 @@ begin
             // dont follow this flag if my flag is not inbase
             if ((sv_gamemode.Value = GAMESTYLE_CTF) or (sv_gamemode.Value = GAMESTYLE_INF)) and
                 (Thing[i].Style <> SpriteC.Player.Team) and
-                not Thing[TeamFlag[SpriteC.Player.Team]].InBase then
+                (TeamFlag[SpriteC.Player.Team] > 0) and
+                (not Thing[TeamFlag[SpriteC.Player.Team]].InBase) then
               SeeThing := False;
             // dont take it if is flag in base
             if ((sv_gamemode.Value = GAMESTYLE_CTF) or (sv_gamemode.Value = GAMESTYLE_INF)) and

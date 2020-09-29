@@ -504,9 +504,9 @@ begin
   if not CheckIfCvarExists(CvarName) then Exit;
 
   NewCvar := TBooleanCvar.Create(CvarName, Description, Value, DefaultValue, Flags, OnChange);
-  {$IFDEF DEVELOPMENT}
-  DumpCvar(NewCvar, Value, DefaultValue);
-  {$ENDIF}
+  //{$IFDEF DEVELOPMENT}
+  //DumpCvar(NewCvar, Value, DefaultValue);
+  //{$ENDIF}
   if CVAR_SYNC in Flags then
     CvarsSync.Add(Name, NewCvar);
   Cvars.Add(CvarName, NewCvar);
