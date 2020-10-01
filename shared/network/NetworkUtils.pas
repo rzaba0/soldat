@@ -416,7 +416,8 @@ begin
   begin
     c[i] := s[i + 1];
   end;
-  c[Length(s)] := #0;
+  if Length(s) < Length(c) then
+    c[Length(s)] := #0;
 end;
 
 end.
