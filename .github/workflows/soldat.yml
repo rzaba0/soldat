@@ -4,40 +4,54 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout soldat repository
         uses: actions/checkout@v2
+        with:
+          path: soldat
 
-      - name: Install dependencies
+      - name: Checkout launcher repository
+        uses: actions/checkout@v2
+        with:
+          repository: rzaba0/soldat-launcher
+          path: launcher
+
+      - name: Install soldat dependencies
         run: |
           sudo apt-get install cmake git fpc libprotobuf-dev protobuf-compiler libssl-dev libsdl2-dev libopenal-dev libphysfs-dev libfreetype6
 
       - name: Compile soldat
         run: |
+          cd soldat
           mkdir game-build
           cd game-build
-          cmake .. -DCMAKE_INSTALL_PREFIX=./soldat -DCMAKE_BUILD_TYPE=Release
+          cmake .. -DCMAKE_INSTALL_PREFIX=../../launcher/soldat -DCMAKE_BUILD_TYPE=Release
           make
           make install
 
       - name: Compile server only
         run: |
+          cd soldat
           mkdir server-build
           cd server-build
           cmake .. -DBUILD_CLIENT=0 -DCMAKE_INSTALL_PREFIX=./soldatserver -DCMAKE_BUILD_TYPE=Release
           make
           make install
 
-      # We use .tar to preserve file permissions.
-      - name: Tar files
+      - name: Build launcher
         run: |
-          tar -cvf soldat.tar -C game-build soldat
-          tar -cvf soldatserver.tar -C server-build soldatserver
+          cd launcher
+          npm ci
+          npm run make
+
+      - name: Tar server-only build
+        run: |
+          tar -cvf soldatserver.tar -C soldat/server-build soldatserver
 
       - name: Upload game build
         uses: actions/upload-artifact@v2
         with:
           name: soldat-linux-x64
-          path: soldat.tar
+          path: launcher/out/make/zip/linux/x64/
 
       - name: Upload server-only build
         uses: actions/upload-artifact@v2
