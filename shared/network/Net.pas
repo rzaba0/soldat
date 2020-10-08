@@ -888,7 +888,7 @@ end;
 {$WARN 5024 OFF : Parameter "$1" not used}
 procedure DebugNet(nType: ESteamNetworkingSocketsDebugOutputType; pszMsg: PChar); cdecl;
 begin
-  WriteLn('[NET DEBUG] ' + pszMsg);
+  Debug('[NET DEBUG] ' + pszMsg);
 end;
 {$POP}
 
